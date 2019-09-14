@@ -79,14 +79,14 @@ class QueryApi():
     
     def get_users_games(steam_id):
         
-    'returns a list of all games played by a user. Returns dict'
+        'returns a list of all games played by a user. Returns dict'
 
-    response = requests.get(
-        f"""http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={self.api_key}&steamid={steam_id}
-                &format=json&include_appinfo=true""")
-    
-    gamedata = json.loads(response.content)
+        response = requests.get(
+            f"""http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={self.api_key}&steamid={steam_id}
+                    &format=json&include_appinfo=true""")
 
-    all_games = [(i['appid'], i['name']) for i in gamedata['response']['games']]
+        gamedata = json.loads(response.content)
 
-    return all_games
+        all_games = [(i['appid'], i['name']) for i in gamedata['response']['games']]
+
+        return all_games
