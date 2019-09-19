@@ -10,6 +10,7 @@ popular_games.ipynb: takes 13k games played in 2018, queries their genres, then 
 queryer.py: The query class that contains functions for querying friends and game stats. It is used in all other notebooks
 
 datafiles directory:
+        - idlist.txt: a list of input ids obtained by website scraping - approx 1.7M ids
         - all_ids.csv: the 550K steam user_ids that we will be clustering on
         - game_genres.csv: an output from popular_games.ipynb - all 13K games and their genres.
         - gamesfilter.json: the 985-item-long list of game app_ids, that we will be restricting our clustering to

@@ -29,23 +29,23 @@ class QueryApi():
             print("Connection unsuccessful - API key rejected")
     
 
-    def get_player_info(self, steam_id):
-        'Returns basic info on a player. Returns dict'
+#     def get_player_info(self, steam_id):
+#         'Returns basic info on a player. Returns dict'
         
-        response = requests.get(
-            f'http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key={self.api_key}&steamids={steam_id}')
+#         response = requests.get(
+#             f'http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key={self.api_key}&steamids={steam_id}')
         
-        return json.loads(response.content)
+#         return json.loads(response.content)
     
     
-    def get_games_played(self, steam_id):
-        "Returns basic info on a player's games played. Returns dict"
+#     def get_games_played(self, steam_id):
+#         "Returns basic info on a player's games played. Returns dict"
         
-        response = requests.get(
-            f'''http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={self.api_key}&steamid={steam_id}
-            &format=json&include_appinfo=true''')
+#         response = requests.get(
+#             f'''http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={self.api_key}&steamid={steam_id}
+#             &format=json&include_appinfo=true''')
         
-        return json.loads(response.content)
+#         return json.loads(response.content)
     
     
     def get_game_info(self, app_id):
@@ -56,28 +56,33 @@ class QueryApi():
             
         return json.loads(response.content)
 
-    def get_friends(self, steam_id):
+#     def get_friends(self, steam_id):
         
-        'gets all friend-related data for a steam id. the id you supply can actually be a list of ids, separated by commas. Returns dict'
+#         'gets all friend-related data for a steam id. the id you supply can actually be a list of ids, separated by commas. Returns dict'
+        
+#         response = requests.get(
+#             f'http://api.steampowered.com/ISteamUser/GetFriendList/v0001/?key={self.api_key}&steamid={steam_id}&relationship=friend')
+        
+#         return json.loads(response.content)
+    
+    
+    def find_friends(self, steam_id):
+
+        'returns a list of all friends for a steam_id. Uses the get_friends() function. Returns dict'
         
         response = requests.get(
             f'http://api.steampowered.com/ISteamUser/GetFriendList/v0001/?key={self.api_key}&steamid={steam_id}&relationship=friend')
         
-        return json.loads(response.content)
-    
-    
-    def find_all_friends(self, steam_id):
-
-        'returns a list of all friends for a steam_id. Uses the get_friends() function. Returns dict'
+        friend = json.loads(response.content) # query steam api
+        try:
+            all_friends = [i['steamid'] for i in friend['friendslist']['friends']] # pick out steam ids from returned dictionary
+            return all_friends
         
-        friend = self.get_friends(steam_id) # query steam api
-
-        all_friends = [i['steamid'] for i in friend['friendslist']['friends']] # pick out steam ids from returned dictionary
-
-        return all_friends
+        except KeyError:
+            return []        
     
     
-    def get_users_games(steam_id):
+    def get_users_games(self,steam_id):
         
         'returns a list of all games played by a user. Returns dict'
 
