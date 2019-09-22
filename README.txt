@@ -1,13 +1,17 @@
-The objective of this project is to cluster Steam gamers together, in order to recommend them games based off what they and their friends have played in the past. The steps are as follows:
+Collaborative recommender project in two phases:
 
-1) Find active Steam IDs by querying Steam's API - COMPLETE
-2) KMeans clustering to understand groups better. - IN PROGRESS. INITIAL SILHOUETTE SCORE - 0.55 - GOOD START, COULD BE BETTER.
-3) Profiling and automated recommender system. - NOT YET BEGUN
+Phase 1:
+    - Using dataset from Kaggle, group Steam users into clusters based on games played - SILLHOUETTE SCORE .55, BUT ONLY 9K PLAYERS
 
-clusterer.ipynb: KMeans clustering model
-feature_selection.ipynb: Pulls Steam user_ids by querying friends of friends of friends etc.
-popular_games.ipynb: takes 13k games played in 2018, queries their genres, then reduces size to 1K games, taking care to maintain the proportional size of each genre
-queryer.py: The query class that contains functions for querying friends and game stats. It is used in all other notebooks
+Phase 2:
+    - Generate new dataset by querying Steam's API
+        - Gather user ids - COMPLETED - 1.7M USERS
+        - Gather games that we are interested in clustering on - COMPLETED - 985 GAMES
+        - Gather games played for each user - IN PROGRESS
+        - Rerun clustering model on new data set - NOT STARTED
+        - Profile clusters - NOT STARTED
+
+---------------------
 
 datafiles directory:
         - idlist.txt: a list of input ids obtained by website scraping - approx 1.7M ids
