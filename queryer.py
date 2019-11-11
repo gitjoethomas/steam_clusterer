@@ -1,10 +1,10 @@
 
-import pandas as pd
-import numpy as np
+# import pandas as pd
+# import numpy as np
 import requests
-import keyring
+from requests.exceptions import ConnectionError
+# import keyring
 import json
-from IPython.display import clear_output
 
 class QueryApi():
     '''
@@ -28,25 +28,6 @@ class QueryApi():
         else:
             print("Connection unsuccessful - API key rejected")
     
-
-#     def get_player_info(self, steam_id):
-#         'Returns basic info on a player. Returns dict'
-        
-#         response = requests.get(
-#             f'http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key={self.api_key}&steamids={steam_id}')
-        
-#         return json.loads(response.content)
-    
-    
-#     def get_games_played(self, steam_id):
-#         "Returns basic info on a player's games played. Returns dict"
-        
-#         response = requests.get(
-#             f'''http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={self.api_key}&steamid={steam_id}
-#             &format=json&include_appinfo=true''')
-        
-#         return json.loads(response.content)
-    
     
     def get_game_info(self, app_id):
         
@@ -55,15 +36,6 @@ class QueryApi():
         response = requests.get(f'http://steamspy.com/api.php?request=appdetails&appid={app_id}')
             
         return json.loads(response.content)
-
-#     def get_friends(self, steam_id):
-        
-#         'gets all friend-related data for a steam id. the id you supply can actually be a list of ids, separated by commas. Returns dict'
-        
-#         response = requests.get(
-#             f'http://api.steampowered.com/ISteamUser/GetFriendList/v0001/?key={self.api_key}&steamid={steam_id}&relationship=friend')
-        
-#         return json.loads(response.content)
     
     
     def find_friends(self, steam_id):
@@ -85,13 +57,16 @@ class QueryApi():
     def get_users_games(self,steam_id):
         
         'returns a list of all games played by a user. Returns dict'
+        try:
+            response = requests.get(
+                f"""http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={self.api_key}&steamid={steam_id}
+                        &format=json&include_appinfo=true""")
 
-        response = requests.get(
-            f"""http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={self.api_key}&steamid={steam_id}
-                    &format=json&include_appinfo=true""")
+            gamedata = json.loads(response.content)
 
-        gamedata = json.loads(response.content)
-
-        all_games = [(i['appid'], i['name']) for i in gamedata['response']['games']]
+            all_games = [(i['appid'], i['name']) for i in gamedata['response']['games']]
+            
+        except ConnectionError:
+            raise ConnectionError
 
         return all_games
